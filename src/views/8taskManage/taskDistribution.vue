@@ -1,6 +1,6 @@
 <template>
   <div class="dooya-container">
-    <Row>
+    <Row v-if="!spinShow">
       <!-- 任务列表 -->
       <Col>
 

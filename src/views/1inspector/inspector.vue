@@ -1,6 +1,7 @@
 <template>
   <div class="dooya-container">
-    <Row :gutter="16">
+    <Row :gutter="16"
+         v-if="!spinShow">
 
       <Col :span="12">
       <Card>
@@ -35,7 +36,8 @@
 
     <br>
 
-    <Row :gutter="16">
+    <Row :gutter="16"
+         v-if="!spinShow">
       <Col :span="12">
       <Card>
         <p slot="title">
@@ -69,6 +71,10 @@
       </Col>
     </Row>
 
+    <Spin size="large"
+          fix
+          v-if="spinShow"></Spin>
+
   </div>
 </template>
 
@@ -98,6 +104,7 @@ export default {
   methods: {
     // 获取登录信息
     async getUsers() {
+      this.spinShow = true;
       const usersData = (await getLineUsers()).data.data;
       if (usersData.length !== 0) {
         usersData.forEach(user => {
