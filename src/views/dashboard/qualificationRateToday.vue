@@ -38,10 +38,10 @@ export default {
         formatter: "{a} <br/>{b} : {c} ({d}%)"
       },
       grid: {
-        top: "40px",
-        left: "20px",
-        right: "30px",
-        bottom: "30px",
+        // top: "40px",
+        // left: "20px",
+        // right: "30px",
+        // bottom: "30px",
         containLabel: true
       },
       legend: {
@@ -70,7 +70,7 @@ export default {
           },
           label: {
             normal: {
-              formatter: "{b} : {c} ({d}%)"
+              formatter: "{b}: \n {c} ({d}%)"
             }
           }
         }

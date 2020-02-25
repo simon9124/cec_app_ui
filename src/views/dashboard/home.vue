@@ -28,29 +28,16 @@
              :lg="8"
              style="margin-bottom: 20px;">
         <Card shadow>
-          <qualification-rate-today style="height: 320px;"></qualification-rate-today>
+          <!-- <qualification-rate-today style="height: 320px;"></qualification-rate-today> -->
+          <qualification-rate-today style="height: 250px;"></qualification-rate-today>
         </Card>
       </i-col>
-      <!-- <i-col :md="24"
-             :lg="8"
-             style="margin-bottom: 20px;">
-        <Card shadow>
-          <check-standard class='chart-check-standard'
-                          style="height: 320px;"></check-standard>
-        </Card>
-      </i-col> -->
-      <!-- <i-col :md="24"
-             :lg="8"
-             style="margin-bottom: 20px;">
-        <Card shadow>
-          <product-sumWeek style="height: 320px;"></product-sumWeek>
-        </Card>
-      </i-col> -->
       <i-col :md="24"
              :lg="16"
              style="margin-bottom: 20px;">
         <Card shadow>
-          <qualification-rate-month style="height: 320px;"></qualification-rate-month>
+          <!-- <qualification-rate-month style="height: 320px;"></qualification-rate-month> -->
+          <qualification-rate-month style="height: 250px;"></qualification-rate-month>
         </Card>
       </i-col>
     </Row>
@@ -58,14 +45,15 @@
     <!-- 不合格原因 -->
     <Row :gutter="20">
       <i-col :md="24"
-             :xl="8">
-        <Card shadow
-              style="height:352px">
+             :xl="8"
+             style="margin-bottom: 20px;">
+        <Card shadow>
+          <!-- style="height:352px" -->
           <pieChart v-if="pieUnqalifiedReason.qc1.length!==0"
                     title="今日异常：综合检测"
                     :chartData="qc1PieData"
-                    style="height: 320px;" />
-          <!-- :legendData="pieUnqalifiedReason.qc1LegendData" -->
+                    style="height: 250px;" />
+          <!-- style="height: 320px;" -->
           <div v-else
                class="no-data">
             <div class="title">今日异常：综合检测</div>
@@ -83,14 +71,15 @@
         </Card>
       </i-col>
       <i-col :md="24"
-             :xl="8">
-        <Card shadow
-              style="height:352px">
+             :xl="8"
+             style="margin-bottom: 20px;">
+        <Card shadow>
+          <!-- style="height:352px" -->
           <pieChart v-if="pieUnqalifiedReason.qc2.length!==0"
                     title="今日异常：静音检测"
                     :chartData="qc2PieData"
-                    style="height: 320px;" />
-          <!-- :legendData="pieUnqalifiedReason.qc2LegendData" -->
+                    style="height: 250px;" />
+          <!-- style="height: 320px;" -->
           <div v-else
                class="no-data">
             <div class="title">今日异常：静音检测</div>
@@ -108,14 +97,15 @@
         </Card>
       </i-col>
       <i-col :md="24"
-             :xl="8">
-        <Card shadow
-              style="height:352px">
+             :xl="8"
+             style="margin-bottom: 20px;">
+        <Card shadow>
+          <!-- style="height:352px" -->
           <pieChart v-if="pieUnqalifiedReason.qc3.length!==0"
                     title="今日异常：外观检测"
                     :chartData="qc3PieData"
-                    style="height: 320px;" />
-          <!-- :legendData="pieUnqalifiedReason.qc3LegendData" -->
+                    style="height: 250px;" />
+          <!-- style="height: 320px;" -->
           <div v-else
                class="no-data">
             <div class="title">今日异常：外观检测</div>
@@ -132,7 +122,6 @@
           </Select>
         </Card>
       </i-col>
-
     </Row>
 
   </div>
@@ -242,38 +231,38 @@ export default {
   },
   methods: {
     async getData() {
-      if (!this.isMock) {
-        /* 非mock数据 */
-        const result = (await unqualifiedReasonWithProductClass()).data.data;
-        if (result.qc1UnqualifiedReason.length !== 0) {
-          result.qc1UnqualifiedReason.forEach(row => {
-            this.$set(row, "value", row.value);
-            this.$set(row, "name", row.key || "未归类");
-            this.pieUnqalifiedReason.qc1LegendData.push(row.key || "未归类");
-          });
-        }
-        if (result.qc2UnqualifiedReason.length !== 0) {
-          result.qc2UnqualifiedReason.forEach(row => {
-            this.$set(row, "value", row.value);
-            this.$set(row, "name", row.key || "未归类");
-            this.pieUnqalifiedReason.qc2LegendData.push(row.key || "未归类");
-          });
-        }
-        if (result.qc3UnqualifiedReason.length !== 0) {
-          result.qc3UnqualifiedReason.forEach(row => {
-            this.$set(row, "value", row.value);
-            this.$set(row, "name", row.key || "未归类");
-            this.pieUnqalifiedReason.qc3LegendData.push(row.key || "未归类");
-          });
-        }
-        this.pieUnqalifiedReason.qc1 = result.qc1UnqualifiedReason || [];
-        this.pieUnqalifiedReason.qc2 = result.qc2UnqualifiedReason || [];
-        this.pieUnqalifiedReason.qc3 = result.qc3UnqualifiedReason || [];
-        // console.log(this.pieUnqalifiedReason);
-      } else {
-        /* mock数据 */
-        this.pieUnqalifiedReason = pieUnqalifiedReason;
-      }
+      // if (!this.isMock) {
+      //   /* 非mock数据 */
+      //   const result = (await unqualifiedReasonWithProductClass()).data.data;
+      //   if (result.qc1UnqualifiedReason.length !== 0) {
+      //     result.qc1UnqualifiedReason.forEach(row => {
+      //       this.$set(row, "value", row.value);
+      //       this.$set(row, "name", row.key || "未归类");
+      //       this.pieUnqalifiedReason.qc1LegendData.push(row.key || "未归类");
+      //     });
+      //   }
+      //   if (result.qc2UnqualifiedReason.length !== 0) {
+      //     result.qc2UnqualifiedReason.forEach(row => {
+      //       this.$set(row, "value", row.value);
+      //       this.$set(row, "name", row.key || "未归类");
+      //       this.pieUnqalifiedReason.qc2LegendData.push(row.key || "未归类");
+      //     });
+      //   }
+      //   if (result.qc3UnqualifiedReason.length !== 0) {
+      //     result.qc3UnqualifiedReason.forEach(row => {
+      //       this.$set(row, "value", row.value);
+      //       this.$set(row, "name", row.key || "未归类");
+      //       this.pieUnqalifiedReason.qc3LegendData.push(row.key || "未归类");
+      //     });
+      //   }
+      //   this.pieUnqalifiedReason.qc1 = result.qc1UnqualifiedReason || [];
+      //   this.pieUnqalifiedReason.qc2 = result.qc2UnqualifiedReason || [];
+      //   this.pieUnqalifiedReason.qc3 = result.qc3UnqualifiedReason || [];
+      //   // console.log(this.pieUnqalifiedReason);
+      // } else {
+      /* mock数据 */
+      this.pieUnqalifiedReason = pieUnqalifiedReason;
+      // }
       // 如果qc1或qc2或qc3的项数大于4
       if (this.pieUnqalifiedReason.qc1.length > 4) {
         this.pieUnqalifiedReason.qc1.sort(arraySort("value", "desc"));
@@ -443,6 +432,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dooya-container /deep/ {
   background: #f5f7f9;
+  padding-bottom: 0;
   .count-style {
     // font-size: 50px;
     font-size: 36px;

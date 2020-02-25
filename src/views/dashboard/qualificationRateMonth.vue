@@ -26,15 +26,17 @@ export default {
   async mounted() {
     /* eslint-disable */
     const result = !this.isMock
-      ? (await findTotalWithCurrentMonthByDate(
-          new Date().getFullYear() +
-            "-" +
-            (new Date().getMonth() + 1) +
-            "-" +
-            "01",
-          formatDate(new Date()),
-          "line"
-        )).data.data
+      ? (
+          await findTotalWithCurrentMonthByDate(
+            new Date().getFullYear() +
+              "-" +
+              (new Date().getMonth() + 1) +
+              "-" +
+              "01",
+            formatDate(new Date()),
+            "line"
+          )
+        ).data.data
       : monthData;
     const option = {
       color: ["#2d8cf0", "#19be6b"],
@@ -53,22 +55,24 @@ export default {
         }
       },
       legend: {
-        // orient: 'vertical',
-        left: 30,
+        orient: "vertical",
+        left: 0,
         top: 0,
         data: ["产量", "合格数"]
       },
       grid: {
-        // top: "80px",
-        left: "3%",
-        right: "4%",
-        bottom: "20px",
+        left: "0px",
+        right: "10px",
+        bottom: "10px",
         containLabel: true
       },
       xAxis: [
         {
           type: "category",
-          data: result.name
+          data: result.name,
+          axisTick: {
+            show: false
+          }
         }
       ],
       yAxis: [
