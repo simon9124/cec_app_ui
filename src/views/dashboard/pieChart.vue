@@ -88,10 +88,10 @@ export default {
               normal: {
                 // position: "inner",
                 // formatter: '{c}%',
-                formatter: `{b}\n{c}${this.unit}`,
-                textStyle: {
-                  fontSize: 14
-                }
+                formatter: `{b}\n{c}${this.unit}`
+                // textStyle: {
+                //   fontSize: 14
+                // }
               }
             }
           }
