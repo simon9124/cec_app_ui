@@ -231,38 +231,38 @@ export default {
   },
   methods: {
     async getData() {
-      // if (!this.isMock) {
-      //   /* 非mock数据 */
-      //   const result = (await unqualifiedReasonWithProductClass()).data.data;
-      //   if (result.qc1UnqualifiedReason.length !== 0) {
-      //     result.qc1UnqualifiedReason.forEach(row => {
-      //       this.$set(row, "value", row.value);
-      //       this.$set(row, "name", row.key || "未归类");
-      //       this.pieUnqalifiedReason.qc1LegendData.push(row.key || "未归类");
-      //     });
-      //   }
-      //   if (result.qc2UnqualifiedReason.length !== 0) {
-      //     result.qc2UnqualifiedReason.forEach(row => {
-      //       this.$set(row, "value", row.value);
-      //       this.$set(row, "name", row.key || "未归类");
-      //       this.pieUnqalifiedReason.qc2LegendData.push(row.key || "未归类");
-      //     });
-      //   }
-      //   if (result.qc3UnqualifiedReason.length !== 0) {
-      //     result.qc3UnqualifiedReason.forEach(row => {
-      //       this.$set(row, "value", row.value);
-      //       this.$set(row, "name", row.key || "未归类");
-      //       this.pieUnqalifiedReason.qc3LegendData.push(row.key || "未归类");
-      //     });
-      //   }
-      //   this.pieUnqalifiedReason.qc1 = result.qc1UnqualifiedReason || [];
-      //   this.pieUnqalifiedReason.qc2 = result.qc2UnqualifiedReason || [];
-      //   this.pieUnqalifiedReason.qc3 = result.qc3UnqualifiedReason || [];
-      //   // console.log(this.pieUnqalifiedReason);
-      // } else {
-      /* mock数据 */
-      this.pieUnqalifiedReason = pieUnqalifiedReason;
-      // }
+      if (!this.isMock) {
+        /* 非mock数据 */
+        const result = (await unqualifiedReasonWithProductClass()).data.data;
+        if (result.qc1UnqualifiedReason.length !== 0) {
+          result.qc1UnqualifiedReason.forEach(row => {
+            this.$set(row, "value", row.value);
+            this.$set(row, "name", row.key || "未归类");
+            this.pieUnqalifiedReason.qc1LegendData.push(row.key || "未归类");
+          });
+        }
+        if (result.qc2UnqualifiedReason.length !== 0) {
+          result.qc2UnqualifiedReason.forEach(row => {
+            this.$set(row, "value", row.value);
+            this.$set(row, "name", row.key || "未归类");
+            this.pieUnqalifiedReason.qc2LegendData.push(row.key || "未归类");
+          });
+        }
+        if (result.qc3UnqualifiedReason.length !== 0) {
+          result.qc3UnqualifiedReason.forEach(row => {
+            this.$set(row, "value", row.value);
+            this.$set(row, "name", row.key || "未归类");
+            this.pieUnqalifiedReason.qc3LegendData.push(row.key || "未归类");
+          });
+        }
+        this.pieUnqalifiedReason.qc1 = result.qc1UnqualifiedReason || [];
+        this.pieUnqalifiedReason.qc2 = result.qc2UnqualifiedReason || [];
+        this.pieUnqalifiedReason.qc3 = result.qc3UnqualifiedReason || [];
+        // console.log(this.pieUnqalifiedReason);
+      } else {
+        /* mock数据 */
+        this.pieUnqalifiedReason = pieUnqalifiedReason;
+      }
       // 如果qc1或qc2或qc3的项数大于4
       if (this.pieUnqalifiedReason.qc1.length > 4) {
         this.pieUnqalifiedReason.qc1.sort(arraySort("value", "desc"));
