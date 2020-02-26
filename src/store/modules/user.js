@@ -50,16 +50,20 @@ const actions = {
       // getInfo(state.token)
       getUserInfo(state.token)
         .then(response => {
-          const { data } = response;
+          // const { data } = response;
+          const { data } = response.data;
 
           if (!data) {
             reject("Verification failed, please Login again.");
           }
 
-          const { name, avatar } = data;
+          const { user_name, user_avator } = data;
+          commit("SET_NAME", user_name);
+          commit("SET_AVATAR", user_avator);
 
-          commit("SET_NAME", name);
-          commit("SET_AVATAR", avatar);
+          // const { name, avatar } = data;
+          // commit("SET_NAME", name);
+          // commit("SET_AVATAR", avatar);
           resolve(data);
         })
         .catch(error => {
