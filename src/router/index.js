@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from "vue";
+import Router from "vue-router";
 
 Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout';
+import Layout from "@/layout";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -31,85 +31,94 @@ import Layout from '@/layout';
  * all roles can be accessed
  */
 export const constantRoutes = [
-
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: "/login",
+    component: () => import("@/views/login/index"),
     hidden: true
   },
 
   {
-    path: '/404',
-    component: () => import('@/views/404'),
+    path: "/404",
+    component: () => import("@/views/404"),
     hidden: true
   },
-
+  // home
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
+    redirect: "/dashboard",
     children: [
-
       {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/dashboard/index'),
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/home"),
         meta: {
-          title: '首页概览',
-          icon: 'dashboard'
+          title: "首页概览",
+          icon: "dashboard"
         }
       }
     ]
   },
-
+  // 检测驾驶舱 - 车间（管理员或车间主管）
+  {
+    path: "/control-leader-shop",
+    name: "control-leader-shop",
+    meta: {
+      icon: "controlCabin",
+      title: "驾驶舱"
+    },
+    component: () => import("@/views/6inspector/controlCabin.vue")
+  },
+  // 检测员
   {
     path: "/inspect",
     name: "inspect",
     component: Layout,
     children: [
-
       {
         path: "inspector",
         name: "inspector",
         meta: {
-          title: "人员登录",
-          icon: 'people'
+          title: "检测员",
+          icon: "people"
         },
         component: () => import("@/views/1inspector/inspector.vue")
       }
     ]
   },
-
+  // 任务派发
+  {
+    path: "/task",
+    name: "task",
+    component: Layout,
+    children: [
+      {
+        path: "distribute",
+        name: "distribute",
+        meta: {
+          title: "当前任务",
+          icon: "task"
+        },
+        component: () => import("@/views/8taskManage/taskDistribution.vue")
+      }
+    ]
+  },
   // 检测列表
   {
     path: "/electric",
     name: "electric",
     component: Layout,
-    children: [{
-      path: "electricSearch",
-      name: "electricSearch",
-      meta: {
-        title: "检测列表",
-        icon: 'chart'
-      },
-      component: () => import("@/views/2systemManage/electricSearch.vue")
-    }]
-  },
-
-  // 追溯查询
-  {
-    path: "/check",
-    name: "check",
-    component: Layout,
-    children: [{
-      path: "checkSearch",
-      name: "checkSearch",
-      meta: {
-        title: "追溯查询",
-        icon: 'example'
-      },
-      component: () => import("@/views/2systemManage/checkSearch.vue")
-    }]
+    children: [
+      {
+        path: "electricSearch",
+        name: "electricSearch",
+        meta: {
+          title: "检测列表",
+          icon: "chart"
+        },
+        component: () => import("@/views/2systemManage/electricSearch.vue")
+      }
+    ]
   },
 
   // {
@@ -126,19 +135,20 @@ export const constantRoutes = [
 
   // 404 page must be placed at the end !!!
   {
-    path: '*',
-    redirect: '/404',
+    path: "*",
+    redirect: "/404",
     hidden: true
   }
 ];
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({
-    y: 0
-  }),
-  routes: constantRoutes
-});
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({
+      y: 0
+    }),
+    routes: constantRoutes
+  });
 
 const router = createRouter();
 
