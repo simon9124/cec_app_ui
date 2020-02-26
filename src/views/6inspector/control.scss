@@ -24,13 +24,16 @@
     }
 
     &-title {
-      margin: 16px 0;
+      // margin: 16px 0;
+      margin-bottom: 5px;
       text-align: center;
       position: relative;
-      height: 40px;
+      // height: 40px;
+      height: 30px;
 
       h2 {
-        font-size: 30px;
+        // font-size: 30px;
+        font-size: 20px;
         width: 250px;
         line-height: 40px;
         color: #00f6ff;
@@ -46,7 +49,8 @@
     }
 
     &-inner {
-      padding: 20px;
+      // padding: 20px;
+      padding: 10px;
 
       // 预警列表：不下拉 & 滚动
       .col-left {
@@ -63,15 +67,16 @@
 
         // 大块
         &-large {
-          overflow: auto;
-          overflow-y: hidden;
+          width: 100%;
+          // overflow: auto;
+          // overflow-y: hidden;
 
           // 检测总览：不下拉 & 滚动
           .whole {
             // overflow: auto;
             overflow: hidden;
-            padding: 2% 0;
-            min-width: 650px;
+            // padding: 2% 0;
+            // min-width: 650px;
           }
         }
 
@@ -80,12 +85,19 @@
           &-alert {
             background-color: rgba(255, 85, 0, 0.3);
             border-top: 3px solid rgba(255, 85, 0, 0.7);
+            display: inline-block;
+            width: 100%;
+
+            &:first-child {
+              margin: 0;
+            }
           }
         }
 
         // 每个标题
         &-title {
-          font-size: 1.3em;
+          // font-size: 1.3em;
+          font-size: 14px;
           height: 45px;
           line-height: 45px;
           text-align: left;
@@ -96,7 +108,8 @@
         // 每个内容
         &-chart {
           position: relative;
-          margin: 5px 10px 0;
+          // margin: 5px 10px 0;
+          margin: 5px 5px 0;
           background: rgb(11, 18, 46);
 
           .no-data {
@@ -111,7 +124,8 @@
               // font-size: 24px;
               font-size: 36px;
               font-weight: bold;
-              line-height: 180px;
+              // line-height: 180px;
+              line-height: 125px;
               // color: #2db7f5;
               color: #fff;
             }
@@ -119,7 +133,9 @@
 
           // 检测总览：每一块
           .MainBlock {
-            padding: 20px 0;
+            // padding: 20px 0;
+            padding: 10px 0;
+            height: 110px;
             text-align: center;
             position: relative;
 
@@ -127,11 +143,13 @@
               vertical-align: sub;
               margin-bottom: -5px;
               display: inline-block;
-              padding: 10px;
+              // padding: 10px;
+              padding: 5px;
               color: #fff;
               background-color: #073d80;
               border-radius: 5px;
-              font-size: 1.5em;
+              // font-size: 1.5em;
+              font-size: 14px;
               font-weight: bold;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -145,21 +163,26 @@
                   display: inline-block;
                   text-align: center;
                   // width: 9%;
-                  width: 80px;
-                  font-size: 4em;
-                  padding: 5px 0;
-                  margin-left: 10px;
+                  // width: 80px;
+                  // font-size: 4em;
+                  font-size: 30px;
+                  line-height: 40px;
+                  // padding: 5px 0;
+                  // margin-left: 10px;
+                  margin-left: 5px;
                   color: #ff7201;
                 }
 
                 &-small {
                   text-align: center;
-                  font-size: 1.4em;
+                  // font-size: 1.4em;
+                  font-size: 14px;
                   letter-spacing: 2px;
                   color: #fff;
 
                   &:not(:first-child) {
-                    margin-left: 10px;
+                    // margin-left: 10px;
+                    margin-left: 5px;
                   }
                 }
               }
@@ -173,7 +196,8 @@
 
           // 今日各产线：每一块
           &-box {
-            margin-bottom: 20px !important;
+            // margin-bottom: 20px !important;
+            margin-bottom: 10px !important;
 
             &:last-child {
               margin-bottom: 0 !important;
@@ -232,29 +256,39 @@
 
             &-title {
               text-align: left;
-              padding-left: 5%;
-              font-size: 1.6em;
-              font-weight: bold;
+              // padding-left: 5%;
+              padding-left: 15px;
+              // font-size: 1.6em;
+              font-size: 16px;
+              // font-weight: bold;
               // height: 2.8em;
-              height: 3.5em;
+              height: 30px;
+              // height: 3.5em;
               // line-height: 2.8em;
-              line-height: 3.5em;
-              margin-top: 2.5%;
+              // line-height: 3.5em;
+              line-height: 30px;
+              // margin-top: 2.5%;
+              // margin-top: 10px;
+              margin: 10px 0;
             }
 
             &-block {
               z-index: 100;
-              width: 20%;
+              // width: 20%;
+              width: 19%;
               display: inline-block;
-              font-size: 0.7em;
+              // font-size: 0.7em;
+              font-size: 12px;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
 
               &-num {
-                font-size: 2.2em;
-                line-height: 1em;
-                font-weight: bold;
+                // font-size: 2.2em;
+                font-size: 16px;
+                // line-height: 1em;
+                line-height: 16px;
+                // font-weight: bold;
                 color: #f56d04;
               }
             }
