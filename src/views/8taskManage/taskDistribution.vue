@@ -145,7 +145,7 @@ export default {
             this.todayTask = JSON.parse(params(this, "todayTask"));
           }
           // 自动显示任务列表
-          this.timeOnChange(this.formData.workTimeStorage);
+          // this.timeOnChange(this.formData.workTimeStorage);
         }
       } else {
         /* mock数据：根据缓存里的distributed，判断是否已派发任务 */

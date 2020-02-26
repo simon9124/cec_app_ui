@@ -244,7 +244,8 @@ export default {
                     }
                   }
                 },
-                "详情"
+                // "详情"
+                "外观检测"
               )
             ]);
           }
@@ -322,14 +323,14 @@ export default {
     },
     // 点击按钮 - 详情
     show(row) {
-      this.$router.push({
-        // path: "/systemManage/checkSearch",
-        path: "/check/checkSearch",
-        name: "checkSearch",
-        params: {
-          checkSearchNumber: row.barcode
-        }
-      });
+      // this.$router.push({
+      //   // path: "/systemManage/checkSearch",
+      //   path: "/check/checkSearch",
+      //   name: "checkSearch",
+      //   params: {
+      //     checkSearchNumber: row.barcode
+      //   }
+      // });
     }
   }
 };
