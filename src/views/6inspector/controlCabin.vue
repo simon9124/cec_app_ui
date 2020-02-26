@@ -71,8 +71,9 @@
                          :standardValue="item.AverageCount||20"
                          :yAxisMaxValue="item.AverageCount*2||30"
                          unit="台" />
-              <div class="no-data"
-                   :style="{height:parseInt(colBlockMinHeight)-70+'px'}">
+              <div class="no-data">
+                <!-- :style="{height:'180px'}" -->
+                <!-- :style="{height:parseInt(colBlockMinHeight)-70+'px'}" -->
                 <div class="content">暂无预警</div>
               </div>
             </div>
@@ -94,7 +95,7 @@
           </div>
           <div v-if="todayList.length!==0"
                class="col-block-chart whole"
-               :style="{height:'230px',padding:'5px'}"
+               :style="{height:'230px',padding:'5px 0'}"
                @mouseenter="mouseEnter('todayList')"
                @mouseleave="mouseLeave('todayList')">
             <!-- :style="{height:parseInt(colBlockLargeHeight)-70+'px',
@@ -151,7 +152,7 @@
           </div>
           <div v-else
                class="col-block-chart whole"
-               :style="{height:'230px',padding:'5px'}">
+               :style="{height:'230px',padding:'5px 0'}">
             <!-- :style="{height:parseInt(colBlockLargeHeight)-70+'px',padding:0}" -->
 
             <div v-for="(item,j) in todayListNull"
