@@ -8,7 +8,7 @@
              label-position="left">
 
       <div class="title-container">
-        <h3 class="title">电机检测追溯系统</h3>
+        <h3 class="title">质量追溯系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -46,12 +46,12 @@
       <el-button :loading="loading"
                  type="primary"
                  style="width:100%;margin-bottom:30px;"
-                 @click.native.prevent="handleLogin">Login</el-button>
+                 @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
-      </div>
+      </div> -->
 
     </el-form>
   </div>
@@ -80,7 +80,7 @@ export default {
     return {
       loginForm: {
         username: "admin",
-        password: "111111"
+        password: "2019@cestc"
       },
       loginRules: {
         username: [
@@ -120,7 +120,7 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
-            .then(() => {
+            .then(res => {
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
             })
