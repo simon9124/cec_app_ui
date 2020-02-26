@@ -80,7 +80,8 @@ export default {
     return {
       loginForm: {
         username: "admin",
-        password: "2019@cestc"
+        password: "2019@cestc",
+        lineNo: parseInt(this.$route.query.lineNo) || 22
       },
       loginRules: {
         username: [
