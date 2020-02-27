@@ -1,6 +1,28 @@
 <template>
   <div class="dooya-container">
     <!-- <Card> -->
+
+    <!-- 操作 -->
+    <div style="margin-bottom:10px">
+      <Button style="margin-right:5px"
+              type="primary"
+              size="small"
+              :disabled="row.barcode===undefined"
+              @click="sendToMqtt">识别</Button>
+      <!-- <span> -->
+      <span v-if="canBeSubmit">
+        识别结果：{{qc3_form.result}}
+        <Button type="success"
+                size="small"
+                style="margin-left:5px"
+                @click="submitResult">确认</Button>
+        <Button type="warning"
+                size="small"
+                @click="canBeSubmit=!canBeSubmit">重新识别</Button>
+      </span>
+    </div>
+
+    <!-- 表格 -->
     <Table :data="this.isMock?tableData:tableData.pageData"
            :columns="tableColumns"
            :loading="tableLoading"
@@ -24,9 +46,12 @@
 // mockData
 import checkList from "./mockData/index.js";
 // api
-import { getCheckListByPage } from "@/api/check";
+import { getCheckListByPage, updateQc3 } from "@/api/check";
 // mqtt
 import { mqtt, MQTT_SERVICE, options } from "@/libs/sysconstant.js";
+import { resultCallback } from "@/libs/dataHanding"; // 根据请求的status执行回调函数
+// vuex
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -38,6 +63,32 @@ export default {
       // 表头列项
       /* eslint-disable*/
       tableColumns: [
+        {
+          width: 60,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h("Checkbox", {
+                props: {
+                  value: params.row.checkBox
+                },
+                on: {
+                  "on-change": e => {
+                    // console.log(e);
+                    /* 1.取消所有对象的勾选，checkBox设置为false */
+                    this.tableData.pageData.forEach(items => {
+                      this.$set(items, "checkBox", false);
+                    });
+                    /* 2.将勾选的对象的checkBox设置为true */
+                    this.tableData.pageData[params.index].checkBox = e;
+                    this.row =
+                      e === true ? this.tableData.pageData[params.index] : {};
+                  }
+                }
+              })
+            ]);
+          }
+        },
         {
           title: "编号",
           key: "barcode",
@@ -226,42 +277,49 @@ export default {
             );
           },
           minWidth: 100
-        },
-        {
-          title: "操作",
-          key: "action",
-          fixed: "right",
-          minWidth: 100,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.show(params.row);
-                    }
-                  }
-                },
-                // "详情"
-                "外观检测"
-              )
-            ]);
-          }
         }
+        // {
+        //   title: "操作",
+        //   key: "action",
+        //   fixed: "right",
+        //   minWidth: 100,
+        //   align: "center",
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "Button",
+        //         {
+        //           props: {
+        //             type: "primary",
+        //             size: "small"
+        //           },
+        //           on: {
+        //             click: () => {
+        //               this.show(params.row);
+        //             }
+        //           }
+        //         },
+        //         // "详情"
+        //         "外观检测"
+        //       )
+        //     ]);
+        //   }
+        // }
       ],
       // 页码
       pageNum: 1,
       // 每页显示数量
-      pageSize: 12,
+      pageSize: 10,
       // loading
-      tableLoading: false
+      tableLoading: false,
+      row: {}, //当前选择的行,
+      /* qcs提交 */
+      qc3_form: {}, //要提交的qc3表单
+      canBeSubmit: false //是否能够提交
     };
+  },
+  computed: {
+    ...mapGetters(["name"])
   },
   created() {
     this.getData();
@@ -324,6 +382,67 @@ export default {
     changePageSize(pageSize) {
       this.pageSize = pageSize;
       this.getData();
+    },
+    // 顶部按钮 - 识别
+    sendToMqtt() {
+      this.client = mqtt.connect(MQTT_SERVICE, options);
+
+      // mqtt连接
+      this.client.on("connect", e => {
+        // 连接成功：先退订其他消息！
+        this.client.unsubscribe("data/lab/cam");
+
+        // 再订阅该订阅的消息
+        this.client.subscribe("data/lab/cam", { qos: 1 }, error => {
+          if (!error) {
+            // 订阅成功
+            console.log("订阅成功：data/lab/cam");
+          } else {
+            // 订阅失败
+          }
+        });
+
+        const sendMsg = {
+          barcode: this.row.barcode,
+          user: this.name,
+          result: 1,
+          start: 1,
+          time: new Date().toLocaleTimeString()
+        };
+        // console.log(sendMsg);
+
+        // 发布消息到该主题
+        this.client.publish("cmd/lab/cam", JSON.stringify(sendMsg), () => {
+          // 发布成功后，接收消息处理
+          /* eslint-disable */
+          this.client.on("message", (topic, message) => {
+            const msg = JSON.parse(message.toString());
+            console.log(topic, msg);
+            this.qc3_form = {
+              barcode: this.row.barcode,
+              result: msg.result
+            };
+            this.canBeSubmit = true;
+            this.client.unsubscribe("data/lab/cam");
+            this.client.end();
+          });
+        });
+      });
+    },
+    // 顶部按钮 - 确认
+    async submitResult() {
+      const result = (await updateQc3(this.qc3_form)).data.status;
+      resultCallback(
+        result,
+        "提交成功",
+        () => {
+          this.getData();
+          this.canBeSubmit = false;
+        },
+        () => {
+          this.canBeSubmit = false;
+        }
+      );
     },
     // 点击按钮 - 详情
     show(row) {
