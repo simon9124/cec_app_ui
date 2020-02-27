@@ -21,8 +21,12 @@
 </template>
 
 <script>
+// mockData
 import checkList from "./mockData/index.js";
+// api
 import { getCheckListByPage } from "@/api/check";
+// mqtt
+import { mqtt, MQTT_SERVICE, options } from "@/libs/sysconstant.js";
 
 export default {
   data() {

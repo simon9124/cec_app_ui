@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Message } from "iview";
 
-// import store from "@/store";
+import store from "@/store";
 import { getToken } from "./util";
 // import { Spin } from 'iview'
 // const addErrorLog = errorInfo => {
@@ -101,8 +101,13 @@ class HttpRequest {
             content: "服务器异常，请联系技术人员",
             duration: 5
           });
+        } else if (error.toString().indexOf("403") > -1) {
+          Message.error({
+            content: "token已过期，请重新登录",
+            duration: 5
+          });
+          store.dispatch("user/resetToken");
         }
-
         // this.destroy(url);
         // let errorInfo = error.response;
         // if (!errorInfo) {
