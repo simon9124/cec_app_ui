@@ -3,7 +3,7 @@
     <!-- <Card> -->
 
     <!-- 操作 -->
-    <div style="margin-bottom:10px">
+    <div style="margin-bottom:10px;position:relative">
       <Button style="margin-right:5px"
               type="primary"
               size="small"
@@ -20,6 +20,9 @@
                 size="small"
                 @click="canBeSubmit=!canBeSubmit">重新识别</Button>
       </span>
+      <Spin size="large"
+            fix
+            v-if="spinShow"></Spin>
     </div>
 
     <!-- 表格 -->
@@ -310,16 +313,24 @@ export default {
       pageNum: 1,
       // 每页显示数量
       pageSize: 10,
-      // loading
-      tableLoading: false,
-      row: {}, //当前选择的行,
+      /* loading */
+      tableLoading: false, //table
+      spinShow: false, //spin
       /* qcs提交 */
+      row: {}, //当前选择的行,
       qc3_form: {}, //要提交的qc3表单
       canBeSubmit: false //是否能够提交
     };
   },
   computed: {
     ...mapGetters(["name"])
+  },
+  async mounted() {
+    // 监听浏览器的返回按钮：向历史记录中插入了当前页
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", this.goBack, false);
+    }
   },
   created() {
     this.getData();
@@ -385,14 +396,19 @@ export default {
     },
     // 顶部按钮 - 识别
     sendToMqtt() {
+      this.spinShow = true;
       this.client = mqtt.connect(MQTT_SERVICE, options);
 
       // mqtt连接
       this.client.on("connect", e => {
-        // 连接成功：先退订其他消息！
-        this.client.unsubscribe("data/lab/cam");
+        console.log("mqtt连接成功");
 
-        // 再订阅该订阅的消息
+        // 先退订其他消息
+        // this.client.unsubscribe("data/lab/cam", { qos: 1 }, () => {
+        //   console.log("取消订阅data/lab/cam");
+        // });
+
+        // 再订阅消息
         this.client.subscribe("data/lab/cam", { qos: 1 }, error => {
           if (!error) {
             // 订阅成功
@@ -411,8 +427,10 @@ export default {
         };
         // console.log(sendMsg);
 
-        // 发布消息到该主题
+        // 发布消息
         this.client.publish("cmd/lab/cam", JSON.stringify(sendMsg), () => {
+          console.log("发布成功", JSON.stringify(sendMsg));
+
           // 发布成功后，接收消息处理
           /* eslint-disable */
           this.client.on("message", (topic, message) => {
@@ -424,6 +442,7 @@ export default {
             };
             this.canBeSubmit = true;
             this.client.unsubscribe("data/lab/cam");
+            this.spinShow = false;
             this.client.end();
           });
         });
@@ -438,9 +457,11 @@ export default {
         () => {
           this.getData();
           this.canBeSubmit = false;
+          this.row = {};
         },
         () => {
           this.canBeSubmit = false;
+          this.row = {};
         }
       );
     },
@@ -454,7 +475,16 @@ export default {
       //     checkSearchNumber: row.barcode
       //   }
       // });
+    },
+    // 浏览器返回
+    goBack() {
+      this.client.unsubscribe("data/lab/cam");
+      this.client.end();
     }
+  },
+  destroyed() {
+    this.client.unsubscribe("data/lab/cam");
+    this.client.end();
   }
 };
 </script>
