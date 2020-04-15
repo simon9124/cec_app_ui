@@ -49,7 +49,8 @@ module.exports = {
         }
       },
       "/api": {
-        target: "http://192.168.200.161:666/api",
+        target: "http://192.168.100.161:666/api",
+        // target: "http://192.168.200.161:666/api",
         // target: "http://192.168.200.99/api",
         // target: 'http://192.168.111.82:5000/api',
         changeOrigin: true,
