@@ -4,25 +4,25 @@
 
     <!-- 操作 -->
     <div style="margin-bottom:10px;position:relative">
-      <Button style="margin-right:5px"
+      <!-- <Button style="margin-right:5px"
               type="primary"
               size="small"
               :disabled="row.barcode===undefined"
-              @click="sendToMqtt">识别</Button>
-      <!-- <span> -->
+              @click="sendToMqtt">识别</Button> -->
       <span v-if="canBeSubmit">
-        识别结果：{{qc3_form.result}}
-        <Button type="success"
+        编号：{{qc3_form.barcode}}&nbsp;&nbsp;识别结果：{{ qc3_form.result}}
+        <!-- 识别结果：{{qc3_form.result}} -->
+        <!-- <Button type="success"
                 size="small"
                 style="margin-left:5px"
                 @click="submitResult">确认</Button>
         <Button type="warning"
                 size="small"
-                @click="canBeSubmit=!canBeSubmit">重新识别</Button>
+                @click="canBeSubmit=!canBeSubmit">重新识别</Button> -->
       </span>
-      <Spin size="large"
+      <!-- <Spin size="large"
             fix
-            v-if="spinShow"></Spin>
+            v-if="spinShow"></Spin> -->
     </div>
 
     <!-- 表格 -->
@@ -334,6 +334,7 @@ export default {
   },
   created() {
     this.getData();
+    this.sendToMqtt();
   },
   methods: {
     // 获取首页数据
@@ -418,34 +419,49 @@ export default {
           }
         });
 
-        const sendMsg = {
-          barcode: this.row.barcode,
-          user: this.name,
-          result: 1,
-          start: 1,
-          time: new Date().toLocaleTimeString()
-        };
+        // const sendMsg = {
+        //   barcode: this.row.barcode,
+        //   user: this.name,
+        //   result: 1,
+        //   start: 1,
+        //   time: new Date().toLocaleTimeString()
+        // };
         // console.log(sendMsg);
 
         // 发布消息
-        this.client.publish("cmd/lab/cam", JSON.stringify(sendMsg), () => {
-          console.log("发布成功", JSON.stringify(sendMsg));
+        // this.client.publish("cmd/lab/cam", JSON.stringify(sendMsg), () => {
+        //   console.log("发布成功", JSON.stringify(sendMsg));
 
-          // 发布成功后，接收消息处理
-          /* eslint-disable */
-          this.client.on("message", (topic, message) => {
-            const msg = JSON.parse(message.toString());
-            console.log(topic, msg);
-            this.qc3_form = {
-              barcode: this.row.barcode,
-              result: msg.result
-            };
-            this.canBeSubmit = true;
-            this.client.unsubscribe("data/lab/cam");
-            this.spinShow = false;
-            this.client.end();
-          });
+        // 发布成功后，接收消息处理
+        /* eslint-disable */
+        this.client.on("message", (topic, message) => {
+          const msg = JSON.parse(message.toString());
+          console.log(topic, msg);
+          this.qc3_form = {
+            barcode: msg.barcode,
+            user: msg.user,
+            result: msg.result,
+            time: msg.time,
+            start: msg.start
+          };
+          // this.qc3_form = {
+          //   barcode: "22Y10012001220030",
+          //   user: "王明雪",
+          //   result: 7,
+          //   time: "2020-04-14 11:29:47",
+          //   start: 0
+          // };
+          // this.qc3_form = {
+          //   barcode: this.row.barcode,
+          //   result: msg.result
+          // };
+          // this.client.unsubscribe("data/lab/cam");
+          this.canBeSubmit = true;
+          this.spinShow = false;
+          this.submitResult();
+          // this.client.end();
         });
+        // });
       });
     },
     // 顶部按钮 - 确认
@@ -453,14 +469,14 @@ export default {
       const result = (await updateQc3(this.qc3_form)).data.status;
       resultCallback(
         result,
-        "提交成功",
+        "识别成功",
         () => {
           this.getData();
-          this.canBeSubmit = false;
+          // this.canBeSubmit = false;
           this.row = {};
         },
         () => {
-          this.canBeSubmit = false;
+          // this.canBeSubmit = false;
           this.row = {};
         }
       );
