@@ -56,14 +56,11 @@ const actions = {
           if (!data) {
             reject("Verification failed, please Login again.");
           }
+          console.log(data);
 
-          const { user_name, user_avator } = data;
-          commit("SET_NAME", user_name);
+          const { userName, user_avator } = data;
+          commit("SET_NAME", userName);
           commit("SET_AVATAR", user_avator);
-
-          // const { name, avatar } = data;
-          // commit("SET_NAME", name);
-          // commit("SET_AVATAR", avatar);
           resolve(data);
         })
         .catch(error => {
