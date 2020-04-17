@@ -1,17 +1,15 @@
 <template>
   <div class="dooya-container">
-    <!-- <Card> -->
 
     <!-- 操作 -->
     <div style="margin-bottom:10px;position:relative">
-      <!-- <Button style="margin-right:5px"
+      <Button style="margin-right:5px"
               type="primary"
               size="small"
               :disabled="row.barcode===undefined"
-              @click="sendToMqtt">识别</Button> -->
+              @click="sendToMqtt">识别</Button>
       <span v-if="canBeSubmit">
         编号：{{qc3_form.barcode}}&nbsp;&nbsp;识别结果：{{ qc3_form.result}}
-        <!-- 识别结果：{{qc3_form.result}} -->
         <!-- <Button type="success"
                 size="small"
                 style="margin-left:5px"
@@ -20,9 +18,9 @@
                 size="small"
                 @click="canBeSubmit=!canBeSubmit">重新识别</Button> -->
       </span>
-      <!-- <Spin size="large"
+      <Spin size="large"
             fix
-            v-if="spinShow"></Spin> -->
+            v-if="spinShow"></Spin>
     </div>
 
     <!-- 表格 -->
@@ -41,7 +39,7 @@
               @on-page-size-change="changePageSize"></Page>
       </div>
     </div>
-    <!-- </Card> -->
+
   </div>
 </template>
 
@@ -59,11 +57,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      // 原始数据
-      tableDataOrg: [],
-      // 处理后的当页数据
-      tableData: [],
-      // 表头列项
+      tableDataOrg: [], // 原始数据
+      tableData: [], // 处理后的当页数据
       /* eslint-disable*/
       tableColumns: [
         {
@@ -308,11 +303,9 @@ export default {
         //     ]);
         //   }
         // }
-      ],
-      // 页码
-      pageNum: 1,
-      // 每页显示数量
-      pageSize: 10,
+      ], // 表头列项
+      pageNum: 1, // 页码
+      pageSize: 10, // 每页显示数量
       /* loading */
       tableLoading: false, //table
       spinShow: false, //spin
@@ -333,8 +326,8 @@ export default {
     }
   },
   created() {
+    this.getMqttData();
     this.getData();
-    this.sendToMqtt();
   },
   methods: {
     // 获取首页数据
@@ -395,9 +388,9 @@ export default {
       this.pageSize = pageSize;
       this.getData();
     },
-    // 顶部按钮 - 识别
-    sendToMqtt() {
-      this.spinShow = true;
+    // 连接mqtt服务并订阅消息
+    getMqttData() {
+      // this.spinShow = true;
       this.client = mqtt.connect(MQTT_SERVICE, options);
 
       // mqtt连接
@@ -409,31 +402,17 @@ export default {
         //   console.log("取消订阅data/lab/cam");
         // });
 
-        // 再订阅消息
-        this.client.subscribe("data/lab/cam", { qos: 1 }, error => {
+        // 订阅消息
+        this.client.subscribe("data/lab/cam/123", { qos: 1 }, error => {
           if (!error) {
             // 订阅成功
-            console.log("订阅成功：data/lab/cam");
+            console.log("订阅成功：data/lab/cam/123");
           } else {
             // 订阅失败
           }
         });
 
-        // const sendMsg = {
-        //   barcode: this.row.barcode,
-        //   user: this.name,
-        //   result: 1,
-        //   start: 1,
-        //   time: new Date().toLocaleTimeString()
-        // };
-        // console.log(sendMsg);
-
-        // 发布消息
-        // this.client.publish("cmd/lab/cam", JSON.stringify(sendMsg), () => {
-        //   console.log("发布成功", JSON.stringify(sendMsg));
-
-        // 发布成功后，接收消息处理
-        /* eslint-disable */
+        // 接收消息处理
         this.client.on("message", (topic, message) => {
           const msg = JSON.parse(message.toString());
           console.log(topic, msg);
@@ -444,24 +423,26 @@ export default {
             time: msg.time,
             start: msg.start
           };
-          // this.qc3_form = {
-          //   barcode: "22Y10012001220030",
-          //   user: "王明雪",
-          //   result: 7,
-          //   time: "2020-04-14 11:29:47",
-          //   start: 0
-          // };
-          // this.qc3_form = {
-          //   barcode: this.row.barcode,
-          //   result: msg.result
-          // };
-          // this.client.unsubscribe("data/lab/cam");
           this.canBeSubmit = true;
           this.spinShow = false;
           this.submitResult();
-          // this.client.end();
         });
-        // });
+      });
+    },
+    // 顶部按钮 - 识别
+    sendToMqtt() {
+      this.spinShow = true;
+      const sendMsg = {
+        barcode: this.row.barcode,
+        user: this.name,
+        result: 1,
+        start: 1,
+        time: new Date().toLocaleTimeString()
+      };
+      // console.log(sendMsg);
+      // 发布消息
+      this.client.publish("cmd/lab/cam/123", JSON.stringify(sendMsg), () => {
+        console.log("发布成功", JSON.stringify(sendMsg));
       });
     },
     // 顶部按钮 - 确认
@@ -494,12 +475,12 @@ export default {
     },
     // 浏览器返回
     goBack() {
-      this.client.unsubscribe("data/lab/cam");
+      this.client.unsubscribe("data/lab/cam/123");
       this.client.end();
     }
   },
   destroyed() {
-    this.client.unsubscribe("data/lab/cam");
+    this.client.unsubscribe("data/lab/cam/123");
     this.client.end();
   }
 };
